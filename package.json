@@ -1,0 +1,15 @@
+{
+  "name": "2025-sirencontrol",
+  "version": "1.0.0",
+  "description": "Control application for 2025 bot",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "4h-alarm",
+  "license": "MIT",
+  "devDependencies": {
+    "electron": "^34.2.0"
+  }
+}
