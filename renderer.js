@@ -1,34 +1,80 @@
 import { NT4_Client } from "./NT4.js";
 
-const WebSocket = require('ws');
-const ws = new WebSocket('ws://10.20.79.2:8888/networktables/ws');
+const toDashboard = "/datatable/";
+const toRobot = "/robot/";
+const x = "x";
+const y = "y";
 
-ws.onopen = function(){
-    console.log('WebSocket Client Connected');
-};
+const yValue = 2079.0;
 
-ws.onmessage = function(event){
-    const data = JSON.parse(event.data);
-    console.log('Data recieved', data);
-};
+const ntClient = new NT4_Client(
+    '172.22.11.2',
+    "2079dashboard",
+    (topic) => {
+      // Topic announce
+    },
+    (topic) => {
+      // Topic unannounce
+    },
+    (topic, timestamp, value) => {
+      // New data
+    //   if (topic.name === toDashboard + "x") {
+    //     selectedLevel = value;
+    //   } else if (topic.name === toDashboardPrefix +"y") {
+    //     l1State = value;
+    //   } else {
+    //     return;
+    //   }
+    //   document.body.style.backgroundColor = "white";
+    //   updateUI();
 
-ws.onclose = function(){
-    console.log('WebSocket Connection Closed');
-};
+        if(topic.name === "/datatable/x"){
+            document.getElementById('info').innerText =
+            `X: ${value}`;
+        }
+console.log('Data recievied', topic.name);
+    },
+    () => {
+      // Connected
+    },
+    () => {
+      // Disconnected
+      document.body.style.backgroundColor = "red";
+    }
+  );  
 
-ws.onerror = function(error){
-    console.log('WebSocket Connection Error: ', error);
-};
+  ntClient.subscribe(
+    [
+      "/datatable/x",
+      "/datatable/y",
+    ],
+    false,
+    false,
+    0.02
+  );
 
-setupWebSocket(); 
+  
+
+  document.getElementById('myButton4').addEventListener('click', function() {
+    console.log('l4');
+    if (ntClient && typeof ntClient.publishTopic === 'function' && typeof ntClient.addSample === 'function') {
+        ntClient.publishTopic("/datatable/y", "double");
+        ntClient.addSample("/datatable/y", 2079.0);
+    } else {
+        console.error("ntClient is not properly initialized or methods are not available.");
+    }
+});
+
+  ntClient.connect();
 
 function handleButtonClick(event) {
     console.log('Button clicked', event.target.id);
 }
 
-docuument.addEventListener('DOMContentLoaded', (event)  => {
+document.addEventListener('DOMContentLoaded', (event)  => {
     const buttons = document.querySelectorAll('.button');
     buttons.forEach(button => {
         button.addEventListener('click', handleButtonClick);
     });
 }); 
+
