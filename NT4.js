@@ -286,6 +286,11 @@ export class NT4_Client {
     if (timestamp === null) timestamp = 0;
     this.addTimestampedSample(topic, timestamp, value);
   }
+
+//   getSample(topicName) {
+//     return this.samples[topicName]; // Retrieve the sample
+// }
+
   /** Send some new timestamped value to the server. */
   addTimestampedSample(topic, timestamp, value) {
     let topicObj = this.publishedTopics.get(topic);
