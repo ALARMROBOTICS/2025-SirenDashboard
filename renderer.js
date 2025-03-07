@@ -39,7 +39,7 @@ console.log('Data recievied', topic.name);
     },
     () => {
       // Disconnected
-      document.body.style.backgroundColor = "red";
+      console.log('Disconnected');
     }
   );  
 
